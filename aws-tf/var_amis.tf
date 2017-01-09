@@ -3,6 +3,6 @@ variable "aws_docker_amis" {
   description = "Base AMI to launch the instances with"
 
   default = {
-    us-west-2 = "ami-1bb3057b"
+    us-west-2 = "ami-53ff4d33"
   }
 }

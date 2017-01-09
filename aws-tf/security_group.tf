@@ -3,6 +3,7 @@
 resource "aws_security_group" "elb_sg" {
   name        = "elb_sg"
   description = "used for swarm cluster ELB"
+  vpc_id      = "${aws_vpc.swarm-vpc.id}"
 
   # HTTP access from anywhere
   ingress {
@@ -22,7 +23,8 @@ resource "aws_security_group" "elb_sg" {
 }
 
 resource "aws_security_group" "swarm-cluster" {
-  name = "swarm-cluster"
+  name   = "swarm-cluster"
+  vpc_id = "${aws_vpc.swarm-vpc.id}"
 
   // SSH
   ingress {

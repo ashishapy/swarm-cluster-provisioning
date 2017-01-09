@@ -49,10 +49,6 @@ variable "swarm_worker_token" {
   default = ""
 }
 
-variable "swarm_ami_id" {
-  default = "unknown"
-}
-
 variable "swarm_manager_ip" {
   default = ""
 }
@@ -69,6 +65,10 @@ variable "swarm_instance_type" {
   default = "t2.micro"
 }
 
-variable "swarm_init" {
+variable "rexray" {
+  default = false
+}
+
+variable "efs" {
   default = false
 }

@@ -1,8 +1,9 @@
 resource "aws_instance" "swarm-worker" {
   count         = "${var.swarm_workers}"
-  ami           = "${var.swarm_ami_id}"
+  ami           = "${lookup(var.aws_docker_amis, var.aws_default_region)}"
   instance_type = "${var.swarm_instance_type}"
-  subnet_id     = "${aws_subnet.swarm-priv-subnet.id}"
+  subnet_id     = "${aws_subnet.swarm-pub-subnet.id}"
+  depends_on    = ["aws_instance.swarm-manager"]
 
   tags {
     Name = "swarm-worker-${count.index}"
@@ -22,6 +23,8 @@ resource "aws_instance" "swarm-worker" {
   provisioner "remote-exec" {
     inline = [
       "docker swarm join --token ${var.swarm_worker_token} --advertise-addr ${self.private_ip} ${var.swarm_manager_ip}:2377",
+      "if ${var.rexray}; then echo \"${data.template_file.rexray.rendered}\" | sudo tee /etc/rexray/config.yml; fi",
+      "if ${var.rexray}; then sudo rexray service start >/dev/null 2>/dev/null; fi",
     ]
   }
 }
